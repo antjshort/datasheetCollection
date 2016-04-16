@@ -39,7 +39,7 @@ def getDatasheetURL(dataSheetItem, mpn, mpnDatasheetsDict):
 				mpnDatasheetsDict[mpn] = member['url']
 				break
 		else:
-				print ('%s datasheet could not be found.' % mpn)
+			print ('%s datasheet could not be found.' % mpn)
 
 def parseResponseForDatasheet(response, mpn, mpnDatasheetsDict):	
 	for result in response['results']:
@@ -64,6 +64,11 @@ def retrieveURL(url):
 		print response['msec']
 	return response
 
+def printDataSheetURLs(mpnDatasheetsDict):
+	print "\n     MPN     | Link to datasheet .pdf"	
+	for k,v in mpnDatasheetsDict.items():
+		print ('%s | %s' % (k, v)) 		
+
 def main ():
 	try:
 		inputCsv = sys.argv[1]
@@ -87,9 +92,7 @@ def main ():
 		
 		time.sleep(0.350)	 				
 	
-	print "\n     MPN     | Link to datasheet .pdf"	
-	for k,v in mpnDatasheets.items():
-		print ('%s | %s' % (k, v)) 		
+	printDataSheetURLs(mpnDatasheets)
 
 if __name__ == "__main__":
 	main()
