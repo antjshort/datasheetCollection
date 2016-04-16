@@ -58,7 +58,7 @@ def parseResponseForDatasheet(response, mpn, mpnDatasheetsDict):
                     if DEBUG:
                         print ('%s datasheet could not be found.' % mpn)
                         break
-	 			#extract and store the datasheet url
+                #extract and store the datasheet url
                 else:
                     getDatasheetURL(item['datasheets'], mpn, mpnDatasheetsDict)  					
 #Extract and return json response from url 
@@ -98,14 +98,14 @@ def main ():
          Error - 
          argument1: nameOfCSV.csv
          argument2: "Name of Column Header Containing MPN"
-         argument3: nameOfOutputFileFolder'
+         argument3: nameOfOutputFileFolder
+         e.g. datasheetCollect.py datasheets.csv "Vendor Part Number" Files
          """
          sys.exit()
-
     #Empty list to store all manufacturer part numbers currently missing datasheets
     mpnList = []
     #Retrieve the misisng manufacturer part numbers from input file
-    print 'Extracting MPN\'s CSV input file...'
+    print 'Extracting MPN\'s from CSV input file...'
     extractMpns(inputCsv, columnHeader, mpnList)
     print 'Total MPN\'s found: ', len(mpnList)
     #Empty dictionary to store mpns and datasheet urls
@@ -120,7 +120,6 @@ def main ():
         #Do not query more than 3/s
         time.sleep(0.350) 				
 	
-     #printDataSheetURLs(mpnDatasheets)
     print ('MPN datasheets URLs found: %s/%s' % (len(mpnDatasheets),len(mpnList)))
     print 'Downloading datasheets...'
     for k,v in mpnDatasheets.items():
