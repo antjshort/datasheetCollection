@@ -54,7 +54,7 @@ def parseResponseForDatasheet(response, mpn, mpnDatasheetsDict):
 	   		if not item['datasheets']:
 	   			if DEBUG:
 	 					print ('%s datasheet could not be found.' % mpn)
-	 				break
+				break
 	 			#extract and store the datasheet url
 	   		else:	
 	   			getDatasheetURL(item['datasheets'], mpn, mpnDatasheetsDict)  					
@@ -92,7 +92,12 @@ def main ():
 		columnHeader = sys.argv[2]
 		outputFilesDir = sys.argv[3]
 	except IndexError:
-		print 'Error - argument1: nameOfCSV.csv, argument2: "Name of Column Header Containing MPN", argument3: nameOfOutputFileFolder'
+		print """
+				Error - 
+				argument1: nameOfCSV.csv
+				argument2: "Name of Column Header Containing MPN"
+				argument3: nameOfOutputFileFolder'
+				"""
 		sys.exit()
 	#Empty list to store all manufacturer part numbers currently missing datasheets
 	mpnList = []
