@@ -35,9 +35,12 @@ def extractMpns(inputFile, columnHeader, mpnList):
 #Iterate through datasheet json element for 'url' child, extract only urls pointing to .pdf files
 def getDatasheetURL(dataSheetItem, mpn, mpnDatasheetsDict):
     for member in dataSheetItem:
-        if member['url']:			
-            if member['url'][-4:] == ".pdf":
+        if member['url']:
+            urlStr = member['url'].split('.')
+            fileType = str(urlStr[len(urlStr) - 1])
+            if fileType == 'pdf' or fileType == 'docx' or fileType == 'doc':
                 if DEBUG:
+                    print fileType
                     print member['url']
                 mpnDatasheetsDict[mpn] = member['url']
                 break
@@ -75,7 +78,7 @@ def printDataSheetURLs(mpnDatasheetsDict):
     for k,v in mpnDatasheetsDict.items():
         print ('%s | %s' % (k, v)) 		
 #Download and store PDF to /Files directory
-def downloadPDF(filename, download_url, fileDir):
+def downloadFile(filename, download_url, fileDir):
     #remove illegal characters
     filename = filename.translate(None, r'<>:"/\|?*')
     filename = filename + '.pdf'
@@ -123,7 +126,7 @@ def main ():
     print ('MPN datasheets URLs found: %s/%s' % (len(mpnDatasheets),len(mpnList)))
     print 'Downloading datasheets...'
     for k,v in mpnDatasheets.items():
-        downloadPDF(k, v, outputFilesDir)
+        downloadFile(k, v, outputFilesDir)
     
     print 'Complete'
     
