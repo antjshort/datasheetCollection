@@ -36,8 +36,7 @@ def extractMpns(inputFile, columnHeader, mpnList):
 def getDatasheetURL(dataSheetItem, mpn, mpnDatasheetsDict):
     for member in dataSheetItem:
         if member['url']:
-            urlStr = member['url'].split('.')
-            fileType = str(urlStr[len(urlStr) - 1])
+            fileType = getFileType(member['url'])
             if fileType == 'pdf' or fileType == 'docx' or fileType == 'doc':
                 if DEBUG:
                     print fileType
@@ -74,16 +73,27 @@ def retrieveURL(url):
     return response
 #Print manufacturer part numbers and their associated datasheet URL
 def printDataSheetURLs(mpnDatasheetsDict):
-    print "\n     MPN     | Link to datasheet .pdf"	
+    print "\n     MPN     | Link to datasheet"	
     for k,v in mpnDatasheetsDict.items():
-        print ('%s | %s' % (k, v)) 		
+        print ('%s | %s' % (k, v))
+#Extract filetype from string
+def getFileType(downloadURL):
+    urlStr = downloadURL.split('.')
+    return str(urlStr[len(urlStr) - 1])
+#Remove illegal characters and add file type extension        
+def cleanFilename(filename, downloadURL):
+    filename = filename.translate(None, r'<>:"/\|?*')
+    fileType = getFileType(downloadURL)
+    filename = filename + '.' + fileType
+    
+    if DEBUG:
+        print filename
+    return filename
+
 #Download and store PDF to /Files directory
 def downloadFile(filename, download_url, fileDir):
     #remove illegal characters
-    filename = filename.translate(None, r'<>:"/\|?*')
-    filename = filename + '.pdf'
-    if DEBUG:
-        print filename
+    filename = cleanFilename(filename, download_url)
     #Retrieve url
     r = requests.get(download_url,stream=True)
     r.raw.decode_content = True
@@ -131,4 +141,4 @@ def main ():
     print 'Complete'
     
 if __name__ == "__main__":
-	main()
+    main()
