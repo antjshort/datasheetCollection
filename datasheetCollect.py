@@ -14,7 +14,7 @@ def buildURL(mpnStr):
     url += '&queries=[{"mpn":"'
     url += mpnStr
     url += '"}]'
-    url += '&apikey=9d099e82'
+    url += '&apikey=INSERT_KEY'
     url += '&include=datasheets'
 
     if DEBUG:
