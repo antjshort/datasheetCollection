@@ -115,6 +115,7 @@ def main ():
          e.g. datasheetCollect.py datasheets.csv "Vendor Part Number" Files
          """
          sys.exit()
+    print 'Powered by Octopart - www.octopart.com'
     #Empty list to store all manufacturer part numbers currently missing datasheets
     mpnList = []
     #Retrieve the misisng manufacturer part numbers from input file
