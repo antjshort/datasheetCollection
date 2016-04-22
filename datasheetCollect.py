@@ -16,7 +16,6 @@ def buildURL(mpnStr):
     url += '"}]'
     url += '&apikey=INSERT_KEY'
     url += '&include=datasheets'
-
     if DEBUG:
         print ('%s\nurl: %s\n' % (mpnStr, url))
 
@@ -29,7 +28,6 @@ def extractMpns(inputFile, columnHeader, mpnList):
 		#Add valid non-empty MPNs
             if v[columnHeader]:
                 mpnList.append(v[columnHeader])
-
     if DEBUG:
         print mpnList
 #Iterate through datasheet json element for 'url' child, extract only urls pointing to .pdf files
@@ -82,17 +80,16 @@ def getFileType(downloadURL):
     return str(urlStr[len(urlStr) - 1])
 #Remove illegal characters and add file type extension        
 def cleanFilename(filename, downloadURL):
+    #remove illegal characters
     filename = filename.translate(None, r'<>:"/\|?*')
     fileType = getFileType(downloadURL)
-    filename = filename + '.' + fileType
-    
+    filename = filename + '.' + fileType    
     if DEBUG:
         print filename
+        
     return filename
-
 #Download and store PDF to /Files directory
 def downloadFile(filename, download_url, fileDir):
-    #remove illegal characters
     filename = cleanFilename(filename, download_url)
     #Retrieve url
     r = requests.get(download_url,stream=True)
@@ -119,19 +116,19 @@ def main ():
     #Empty list to store all manufacturer part numbers currently missing datasheets
     mpnList = []
     #Retrieve the misisng manufacturer part numbers from input file
-    print 'Extracting MPN\'s from CSV input file...'
+    print 'Extracting MPNs from CSV input file...'
     extractMpns(inputCsv, columnHeader, mpnList)
-    print 'Total MPN\'s found: ', len(mpnList)
+    print 'Total MPNs found: ', len(mpnList)
     #Empty dictionary to store mpns and datasheet urls
     mpnDatasheets = {}
     print 'Searching database for MPN datasheet URLs...'
     for mpn in mpnList:
-        url=buildURL(mpn)
+        url = buildURL(mpn)
         #Open url and retrieve json response
         response = retrieveURL(url)
         #Parse the response for datasheet urls
         parseResponseForDatasheet(response, mpn, mpnDatasheets)
-        #Do not query more than 3/s
+        #API Rule: Do not query more than 3/s
         time.sleep(0.350) 				
 	
     print ('MPN datasheets URLs found: %s/%s' % (len(mpnDatasheets),len(mpnList)))
