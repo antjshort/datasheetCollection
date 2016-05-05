@@ -45,22 +45,26 @@ def getDatasheetURL(dataSheetItem, mpn, mpnDatasheetsDict):
                  if DEBUG:
                      print ('%s contains no datasheet URL.' % mpn)   
 #Iterate through json response from mpn search query
-def parseResponseForDatasheet(response, mpn, mpnDatasheetsDict):	
-    for result in response['results']:
-        #no valid json data
-        if not result['items']:
-            if DEBUG:
-                print ('%s query returned no results.' % mpn)
-        else:
-            for item in result['items']:
-                #valid json data, but no datasheets element
-                if not item['datasheets']:
-                    if DEBUG:
-                        print ('%s datasheet could not be found.' % mpn)
-                        break
-                #extract and store the datasheet url
-                else:
-                    getDatasheetURL(item['datasheets'], mpn, mpnDatasheetsDict)  					
+def parseResponseForDatasheet(response, mpn, mpnDatasheetsDict):
+	try:	
+		for result in response['results']:
+			#no valid json data
+			if not result['items']:
+				if DEBUG:
+					print ('%s query returned no results.' % mpn)
+			else:
+				for item in result['items']:
+					#valid json data, but no datasheets element
+					if not item['datasheets']:
+						if DEBUG:
+							print ('%s datasheet could not be found.' % mpn)
+							break
+					#extract and store the datasheet url
+					else:
+						getDatasheetURL(item['datasheets'], mpn, mpnDatasheetsDict)
+	except KeyError:
+		print 'Key Error \nResponse: ', response
+
 #Extract and return json response from url 
 def retrieveURL(url):
     data = urllib.urlopen(url).read()
